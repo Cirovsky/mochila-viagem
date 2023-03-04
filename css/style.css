@@ -12,7 +12,6 @@ html {
 }
 
 .principal {
-    flex-grow: 1;
     flex-basis: auto;
     min-width: 600px;
     padding: 4em 2em 2em;
@@ -117,6 +116,7 @@ html {
     align-items: center;
     gap: 1em;
     font-size: 20px;
+    text-transform: capitalize;
 }
 
 .item strong {
