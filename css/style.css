@@ -102,6 +102,9 @@ html {
 .lista {
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 20em;
 }
 
 .item {
@@ -110,13 +113,14 @@ html {
     background: #FFFFFF;
     border-radius: 10px;
     margin: 0 0 1em;
-    width: 100%;
+    flex-grow: 1;
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     gap: 1em;
     font-size: 20px;
-    text-transform: capitalize;
+    text-transform:capitalize;
+    flex-grow: 1;
 }
 
 .item strong {
