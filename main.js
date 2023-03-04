@@ -31,10 +31,15 @@ const addItem = () => {
 const addLista = (item) =>{
     const novoListItem = document.createElement("li");
     const novoStrongNumber = document.createElement("strong");
+    const cancelar = document.createElement("button");
+    cancelar.classList.add("cancelar");
+    cancelar.type = "button";
+    cancelar.textContent = "x";
     novoStrongNumber.textContent = `${item.qtd}`;
     novoListItem.classList.add("item");
     novoListItem.append(novoStrongNumber);
     novoListItem.insertAdjacentText("beforeend", item.nome);
+    novoListItem.append(cancelar);
     lista.append(novoListItem);
 }
 
