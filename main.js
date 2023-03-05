@@ -55,29 +55,34 @@ const somaQtd = (nome, qtd) => {
     return id;
 }
 
-const removeItem = (cancelar, item) => {
-    lista.removeChild(cancelar.parentElement);
-    const removerDaMochila = mochila.indexOf(item);
-    mochila.splice(removerDaMochila, 1);
+const removeItem = (id) => {
+    const elemento = document.querySelector(`[data-id='${id}']`).parentElement;
+    lista.removeChild(elemento);
+    mochila.splice(id, 1);
     localStorage.setItem("mochila", JSON.stringify(mochila));
 }
 
 const criaElemento = (item) => {
     const novoListItem = document.createElement("li");
     const novoStrongNumber = document.createElement("strong");
-    const cancelar = document.createElement("button");
-    cancelar.classList.add("cancelar");
-    cancelar.type = "button";
-    cancelar.textContent = "x";
-    cancelar.onclick = () => removeItem(cancelar, item);
+    const botaoDeletar = criarBotaoDeletar();
+    botaoDeletar.onclick = () => removeItem(item.id);
     novoStrongNumber.textContent = `${item.qtd}`;
     novoListItem.classList.add("item");
     novoStrongNumber.dataset.id = item.id;
     novoListItem.append(novoStrongNumber);
     novoListItem.innerHTML += item.nome;
-    novoListItem.append(cancelar);
+    novoListItem.append(botaoDeletar);
     lista.append(novoListItem);
     localStorage.setItem("mochila", JSON.stringify(mochila));
+}
+
+const criarBotaoDeletar = () =>{
+    const botaoDeletar = document.createElement("button");
+    botaoDeletar.classList.add("deleta");
+    botaoDeletar.type = "button";
+    botaoDeletar.textContent = "X";
+    return botaoDeletar;
 }
 
 const atualizaElemento = (id) => {
