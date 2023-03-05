@@ -133,17 +133,17 @@ html {
     font-weight: 400;
 }
 
-.cancelar{
+.deleta{
     align-self: flex-start;
     margin-left: auto;
     background: none;
     border: none;
 }
 
-.cancelar:hover{
+.deleta:hover{
     color: red;
 }
 
-.cancelar:hover > .item{
+.deleta:hover > .item{
     background: red;
 }
