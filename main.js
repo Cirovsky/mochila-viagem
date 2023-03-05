@@ -2,8 +2,14 @@
 
 class Item {
     constructor(nome, qtd) {
-        this.nome = nome;
+        this.nome = nome.toLowerCase();
         this.qtd = qtd;
+    }
+    getNome (){
+        return this.nome;
+    }
+    addQtd (add){
+        this.qtd += add;
     }
 }
 /* variáveis globais */
@@ -17,10 +23,36 @@ const addItem = (nome, qtd) => {
     if(nome == '' || qtd == ''){
         console.log("nenhum item adicionado à mochila");
     }else{
-        const novoItem = new Item(nome, qtd);
-        mochila.push(novoItem);
-        addLista(novoItem);
+        const confNome = nome.toLowerCase();
+        if(verificaNome(confNome)){
+            const qtdAtual = somaQtd(confNome, qtd);
+            atualizaElemento(confNome, qtdAtual);
+        }else{
+            const novoItem = new Item(confNome, qtd);
+            mochila.push(novoItem);
+            criaElemento(novoItem);
+        }
     }
+}
+
+const verificaNome = (nome) => {
+    let temNome = false;
+    mochila.forEach((item)=>{
+        item.getNome() == nome ? temNome = true: temNome = false;
+    })
+    return temNome;
+}
+
+const somaQtd = (nome, qtd) =>{
+    let qtdAtual = 0
+    mochila.forEach((item)=>{
+        if(item.getNome() == nome){
+            item.addQtd(qtd);
+            localStorage.setItem("mochila", JSON.stringify(mochila));
+            qtdAtual = item.qtd;
+        }
+    })
+    return qtdAtual;
 }
 
 const removeItem = (cancelar,item) =>{
@@ -31,7 +63,7 @@ const removeItem = (cancelar,item) =>{
     localStorage.setItem("mochila", JSON.stringify(mochila));
 }
 
-const addLista = (item) =>{
+const criaElemento = (item) =>{
     const novoListItem = document.createElement("li");
     const novoStrongNumber = document.createElement("strong");
     const cancelar = document.createElement("button");
@@ -42,10 +74,20 @@ const addLista = (item) =>{
     novoStrongNumber.textContent = `${item.qtd}`;
     novoListItem.classList.add("item");
     novoListItem.append(novoStrongNumber);
-    novoListItem.insertAdjacentText("beforeend", item.nome);
+    novoListItem.innerHTML += item.nome;
     novoListItem.append(cancelar);
     lista.append(novoListItem);
     localStorage.setItem("mochila", JSON.stringify(mochila));
+}
+
+const atualizaElemento = (nome, qtd) =>{
+    const listaLi = lista.querySelectorAll(".item")
+    listaLi.forEach((li)=>{
+        const nomeLi = li.querySelector("strong").nextSibling.textContent;
+        if(nomeLi == nome){
+            li.querySelector("strong").innerText = qtd; 
+        }
+    })
 }
 
 const loadLista = () =>{
