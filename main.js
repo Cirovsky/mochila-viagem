@@ -11,8 +11,7 @@ const mochila = [];
 
 const form = document.querySelector("#novoItem");
 
-const lista = document.querySelector(".lista")
-console.log(lista)
+const lista = document.querySelector(".lista");
 
 /* funções */
 const addItem = () => {
@@ -28,6 +27,11 @@ const addItem = () => {
     }
 }
 
+const removeItem = (cancelar) =>{
+    console.log(cancelar.parentElement);
+    lista.removeChild(cancelar.parentElement);
+}
+
 const addLista = (item) =>{
     const novoListItem = document.createElement("li");
     const novoStrongNumber = document.createElement("strong");
@@ -35,6 +39,7 @@ const addLista = (item) =>{
     cancelar.classList.add("cancelar");
     cancelar.type = "button";
     cancelar.textContent = "x";
+    cancelar.onclick = () => removeItem(cancelar);
     novoStrongNumber.textContent = `${item.qtd}`;
     novoListItem.classList.add("item");
     novoListItem.append(novoStrongNumber);
@@ -42,6 +47,7 @@ const addLista = (item) =>{
     novoListItem.append(cancelar);
     lista.append(novoListItem);
 }
+
 
 const clearForm = () => {
     document.querySelector("#nome").value = '';
