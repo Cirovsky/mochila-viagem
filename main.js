@@ -6,10 +6,10 @@ class Item {
         this.qtd = qtd;
         this.id = id;
     }
-    getNome (){
+    getNome() {
         return this.nome;
     }
-    addQtd (add){
+    add(add) {
         this.qtd += add;
     }
 }
@@ -21,14 +21,21 @@ const lista = document.querySelector(".lista");
 
 /* funções */
 const addItem = (nome, qtd) => {
-    if(nome == '' || qtd == ''){
+    if (nome == '' || qtd == '') {
         console.log("nenhum item adicionado à mochila");
-    }else{
+    } else {
         const confNome = nome.toLowerCase();
-        if(verificaNome(confNome)){
-            const idElemento = somaQtd(nome, qtd);
-            atualizaElemento(idElemento);
-        }else{
+        let existe = undefined;
+        if (mochila.length > 0) {
+            existe = mochila.find(item => {
+            return item.nome == nome
+            });
+            console.log("existe?",existe);
+        }
+        if(existe){
+            existe.add(qtd);
+            atualizaElemento(existe.id);
+        }else {
             const novoItem = new Item(confNome, qtd, mochila.length);
             mochila.push(novoItem);
             criaElemento(novoItem);
@@ -36,21 +43,11 @@ const addItem = (nome, qtd) => {
     }
 }
 
-const verificaNome = (nome) => {
-    let temNome = false;
-    mochila.forEach((item)=>{
-        if(item.getNome() == nome){
-            temNome = true;
-        }
-    })
-    return temNome;
-}
-
-const somaQtd = (nome, qtd) =>{
+const somaQtd = (nome, qtd) => {
     let id = 0
-    mochila.forEach((item)=>{
-        if(item.getNome() == nome){
-            item.addQtd(qtd);
+    mochila.forEach((item) => {
+        if (item.getNome() == nome) {
+            item.add(qtd);
             localStorage.setItem("mochila", JSON.stringify(mochila));
             id = item.id;
         }
@@ -58,21 +55,21 @@ const somaQtd = (nome, qtd) =>{
     return id;
 }
 
-const removeItem = (cancelar,item) =>{
+const removeItem = (cancelar, item) => {
     lista.removeChild(cancelar.parentElement);
     const removerDaMochila = mochila.indexOf(item);
-    mochila.splice(removerDaMochila,1);
+    mochila.splice(removerDaMochila, 1);
     localStorage.setItem("mochila", JSON.stringify(mochila));
 }
 
-const criaElemento = (item) =>{
+const criaElemento = (item) => {
     const novoListItem = document.createElement("li");
     const novoStrongNumber = document.createElement("strong");
     const cancelar = document.createElement("button");
     cancelar.classList.add("cancelar");
     cancelar.type = "button";
     cancelar.textContent = "x";
-    cancelar.onclick = () => removeItem(cancelar,item);
+    cancelar.onclick = () => removeItem(cancelar, item);
     novoStrongNumber.textContent = `${item.qtd}`;
     novoListItem.classList.add("item");
     novoStrongNumber.dataset.id = item.id;
@@ -83,14 +80,14 @@ const criaElemento = (item) =>{
     localStorage.setItem("mochila", JSON.stringify(mochila));
 }
 
-const atualizaElemento = (id) =>{
+const atualizaElemento = (id) => {
     const li = document.querySelector(`[data-id='${id}']`);
     li.innerHTML = mochila[id].qtd;
 }
 
-const loadLista = () =>{
+const loadLista = () => {
     const guardados = JSON.parse(localStorage.mochila);
-    for (let i in guardados){
+    for (let i in guardados) {
         const novoItem = guardados[i];
         addItem(novoItem.nome, novoItem.qtd);
     }
@@ -104,7 +101,7 @@ const clearForm = () => {
 /* funções e métodos chamados ao carregar a página */
 
 form.addEventListener("submit", (e) => {
-    
+
     e.preventDefault();
     const nomeItem = document.querySelector("#nome").value;
     const qtdItem = parseInt(document.querySelector("#quantidade").value);
