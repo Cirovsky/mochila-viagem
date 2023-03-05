@@ -8,8 +8,6 @@ class Item {
 }
 /* variáveis globais */
 const mochila = [];
-/* teste */
-/* teste */
 const form = document.querySelector("#novoItem");
 
 const lista = document.querySelector(".lista");
@@ -25,12 +23,12 @@ const addItem = (nome, qtd) => {
     }
 }
 
-
 const removeItem = (cancelar,item) =>{
     console.log(cancelar.parentElement);
     lista.removeChild(cancelar.parentElement);
     const removerDaMochila = mochila.indexOf(item);
     mochila.splice(removerDaMochila,1);
+    localStorage.setItem("mochila", JSON.stringify(mochila));
 }
 
 const addLista = (item) =>{
@@ -52,20 +50,18 @@ const addLista = (item) =>{
 
 const loadLista = () =>{
     const guardados = JSON.parse(localStorage.mochila);
-    console.log(guardados)
     for (let i in guardados){
         const novoItem = guardados[i];
-        mochila.push(new Item(novoItem.nome, novoItem.qtd));
+        addItem(novoItem.nome, novoItem.qtd);
     }
-    mochila.forEach((item)=>{
-        addLista(item);
-    })
 }
 
 const clearForm = () => {
     document.querySelector("#nome").value = '';
     document.querySelector("#quantidade").value = '';
 }
+
+/* funções e métodos chamados ao carregar a página */
 
 form.addEventListener("submit", (e) => {
     
