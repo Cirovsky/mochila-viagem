@@ -9,22 +9,17 @@ class Item {
 /* variáveis globais */
 const mochila = [];
 /* teste */
-const camisa = new Item("camisa", 7)
-mochila.push(camisa)
 /* teste */
 const form = document.querySelector("#novoItem");
 
 const lista = document.querySelector(".lista");
 
 /* funções */
-const addItem = () => {
-    const nomeItem = document.querySelector("#nome").value;
-    const qtdItem = parseInt(document.querySelector("#quantidade").value);
-
-    if(nomeItem == '' || qtdItem == ''){
+const addItem = (nome, qtd) => {
+    if(nome == '' || qtd == ''){
         console.log("nenhum item adicionado à mochila");
     }else{
-        const novoItem = new Item(nomeItem, qtdItem);
+        const novoItem = new Item(nome, qtd);
         mochila.push(novoItem);
         addLista(novoItem);
     }
@@ -52,9 +47,16 @@ const addLista = (item) =>{
     novoListItem.insertAdjacentText("beforeend", item.nome);
     novoListItem.append(cancelar);
     lista.append(novoListItem);
+    localStorage.setItem("mochila", JSON.stringify(mochila));
 }
 
 const loadLista = () =>{
+    const guardados = JSON.parse(localStorage.mochila);
+    console.log(guardados)
+    for (let i in guardados){
+        const novoItem = guardados[i];
+        mochila.push(new Item(novoItem.nome, novoItem.qtd));
+    }
     mochila.forEach((item)=>{
         addLista(item);
     })
@@ -66,8 +68,11 @@ const clearForm = () => {
 }
 
 form.addEventListener("submit", (e) => {
+    
     e.preventDefault();
-    addItem();
+    const nomeItem = document.querySelector("#nome").value;
+    const qtdItem = parseInt(document.querySelector("#quantidade").value);
+    addItem(nomeItem, qtdItem);
     clearForm();
 });
 
